@@ -197,8 +197,8 @@ struct ContentView: View {
     var body: some View {
         Group {
             if let info = spotifyInfo {
-                ZStack { // Stack views on top of each other
-                    // Always visible two small squares (hidden when hovered)
+                VStack(alignment: .center, spacing: 0) {
+                    // Always visible two small squares
                     HStack(spacing: 200) {
                         Group {
                             if let urlString = info.albumArtURL, let url = URL(string: urlString) {
@@ -275,13 +275,13 @@ struct ContentView: View {
                                         case .empty:
                                             Rectangle()
                                                 .fill(Color.black)
-                                                .frame(width: 50, height: 50)
+                                                .frame(width: 50, height: 60)
                                                 .clipShape(RoundedRectangle(cornerRadius: 6))
                                         case .success(let image):
                                             ZStack {
                                                 Rectangle()
                                                     .fill(Color.black)
-                                                    .frame(width: 50, height: 50)
+                                                    .frame(width: 50, height: 60)
                                                 image
                                                     .resizable()
                                                     .scaledToFill()
@@ -292,19 +292,19 @@ struct ContentView: View {
                                         case .failure(_):
                                             Rectangle()
                                                 .fill(Color.black)
-                                                .frame(width: 50, height: 50)
+                                                .frame(width: 50, height: 60)
                                                 .clipShape(RoundedRectangle(cornerRadius: 6))
                                         @unknown default:
                                             Rectangle()
                                                 .fill(Color.black)
-                                                .frame(width: 50, height: 50)
+                                                .frame(width: 50, height: 60)
                                                 .clipShape(RoundedRectangle(cornerRadius: 6))
                                         }
                                     }
                                 } else {
                                     Rectangle()
                                         .fill(Color.black)
-                                        .frame(width: 50, height: 50)
+                                        .frame(width: 50, height: 60)
                                         .clipShape(RoundedRectangle(cornerRadius: 6))
                                 }
                             }
@@ -384,14 +384,13 @@ struct ContentView: View {
                         .padding(.vertical, 6)
                         .background(Color.black.opacity(0.9))
                         .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: 12, bottomTrailingRadius: 12))
-                        .transition(.scale)
-                        .offset(x: 0, y: 60)
+                        .transition(.move(edge: .top).combined(with: .opacity))
                     }
 
                 }
             } else {
                 // Loading view
-                ZStack {
+                VStack(alignment: .center, spacing: 0) {
                     HStack(spacing: 200) {
                         Rectangle()
                             .fill(Color.black)
