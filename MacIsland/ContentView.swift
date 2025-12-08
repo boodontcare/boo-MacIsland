@@ -24,6 +24,18 @@ struct SpotifyInfo {
 }
 
 struct ContentView: View {
+    // MASTER SIZE CONTROL
+    let squareScale: CGFloat = 0.80       // change this to scale everything
+    let gapScale: CGFloat = 3.65         // change this to widen/narrow the gap
+    let bigSquareScale: CGFloat = 2.0    // how much bigger the main square is
+
+    // DERIVED SIZES (automatic math)
+    var smallSquareSize: CGFloat { 40 * squareScale }
+    var bigSquareWidth: CGFloat { smallSquareSize * 2 + spacingBetweenSquares - 32 } // Match total width of small squares minus padding
+    var bigSquareHeight: CGFloat { 100 * squareScale } // Taller to accommodate content
+    var spacingBetweenSquares: CGFloat { smallSquareSize * 1.5 * gapScale }
+    var maxContainerWidth: CGFloat { smallSquareSize * 2 + spacingBetweenSquares + 32 } // Maximum width including big square padding
+
     @State private var isHovered = false
     @State private var spotifyInfo: SpotifyInfo? = nil
     @State private var cancellable: AnyCancellable? = nil
@@ -199,7 +211,7 @@ struct ContentView: View {
             if let info = spotifyInfo {
                 VStack(alignment: .center, spacing: 0) {
                     // Always visible two small squares
-                    HStack(spacing: 200) {
+                    HStack(spacing: spacingBetweenSquares) {
                         Group {
                             if let urlString = info.albumArtURL, let url = URL(string: urlString) {
                                 AsyncImage(url: url) { phase in
@@ -207,67 +219,68 @@ struct ContentView: View {
                                     case .empty:
                                         Rectangle()
                                             .fill(Color.black)
-                                            .frame(width: 40, height: 40)
-                                            .clipShape(UnevenRoundedRectangle(topLeadingRadius: 8, bottomLeadingRadius: isHovered ? 0 : 8, bottomTrailingRadius: isHovered ? 0 : 8, topTrailingRadius: 8))
+                                            .frame(width: smallSquareSize, height: smallSquareSize)
+                                            .clipShape(UnevenRoundedRectangle(topLeadingRadius: 8 * squareScale, bottomLeadingRadius: isHovered ? 0 : 8 * squareScale, bottomTrailingRadius: isHovered ? 0 : 8 * squareScale, topTrailingRadius: 8 * squareScale))
                                     case .success(let image):
                                         ZStack {
                                             Rectangle()
                                                 .fill(Color.black)
-                                                .frame(width: 40, height: 40)
+                                                .frame(width: smallSquareSize, height: smallSquareSize)
                                             image
                                                 .resizable()
                                                 .scaledToFill()
-                                                .frame(width: 32, height: 32)
-                                                .clipShape(UnevenRoundedRectangle(topLeadingRadius: 6, bottomLeadingRadius: isHovered ? 0 : 6, bottomTrailingRadius: isHovered ? 0 : 6, topTrailingRadius: 6))
+                                                .frame(width: 32 * squareScale, height: 32 * squareScale)
+                                                .clipShape(UnevenRoundedRectangle(topLeadingRadius: 6 * squareScale, bottomLeadingRadius: isHovered ? 0 : 6 * squareScale, bottomTrailingRadius: isHovered ? 0 : 6 * squareScale, topTrailingRadius: 6 * squareScale))
                                                 .opacity(isHovered ? 0.0 : 1.0)
                                         }
-                                        .clipShape(UnevenRoundedRectangle(topLeadingRadius: 8, bottomLeadingRadius: isHovered ? 0 : 8, bottomTrailingRadius: isHovered ? 0 : 8, topTrailingRadius: 8))
+                                        .clipShape(UnevenRoundedRectangle(topLeadingRadius: 8 * squareScale, bottomLeadingRadius: isHovered ? 0 : 8 * squareScale, bottomTrailingRadius: isHovered ? 0 : 8 * squareScale, topTrailingRadius: 8 * squareScale))
                                     case .failure(_):
                                         Rectangle()
                                             .fill(Color.black)
-                                            .frame(width: 40, height: 40)
-                                            .clipShape(UnevenRoundedRectangle(topLeadingRadius: 8, bottomLeadingRadius: isHovered ? 0 : 8, bottomTrailingRadius: isHovered ? 0 : 8, topTrailingRadius: 8))
+                                            .frame(width: smallSquareSize, height: smallSquareSize)
+                                            .clipShape(UnevenRoundedRectangle(topLeadingRadius: 8 * squareScale, bottomLeadingRadius: isHovered ? 0 : 8 * squareScale, bottomTrailingRadius: isHovered ? 0 : 8 * squareScale, topTrailingRadius: 8 * squareScale))
                                     @unknown default:
                                         Rectangle()
                                             .fill(Color.black)
-                                            .frame(width: 40, height: 40)
-                                            .clipShape(UnevenRoundedRectangle(topLeadingRadius: 8, bottomLeadingRadius: isHovered ? 0 : 8, bottomTrailingRadius: isHovered ? 0 : 8, topTrailingRadius: 8))
+                                            .frame(width: smallSquareSize, height: smallSquareSize)
+                                            .clipShape(UnevenRoundedRectangle(topLeadingRadius: 8 * squareScale, bottomLeadingRadius: isHovered ? 0 : 8 * squareScale, bottomTrailingRadius: isHovered ? 0 : 8 * squareScale, topTrailingRadius: 8 * squareScale))
                                     }
                                 }
                             } else {
                                 Rectangle()
                                     .fill(Color.black)
-                                    .frame(width: 40, height: 40)
-                                    .clipShape(UnevenRoundedRectangle(topLeadingRadius: 8, bottomLeadingRadius: isHovered ? 0 : 8, bottomTrailingRadius: isHovered ? 0 : 8, topTrailingRadius: 8))
+                                    .frame(width: smallSquareSize, height: smallSquareSize)
+                                    .clipShape(UnevenRoundedRectangle(topLeadingRadius: 8 * squareScale, bottomLeadingRadius: isHovered ? 0 : 8 * squareScale, bottomTrailingRadius: isHovered ? 0 : 8 * squareScale, topTrailingRadius: 8 * squareScale))
                             }
                         }
                         ZStack {
                             Rectangle()
                                 .fill(Color.black)
-                                .frame(width: 40, height: 40)
-                                .clipShape(UnevenRoundedRectangle(topLeadingRadius: 8, bottomLeadingRadius: isHovered ? 0 : 8, bottomTrailingRadius: isHovered ? 0 : 8, topTrailingRadius: 8))
+                                .frame(width: smallSquareSize, height: smallSquareSize)
+                                .clipShape(UnevenRoundedRectangle(topLeadingRadius: 8 * squareScale, bottomLeadingRadius: isHovered ? 0 : 8 * squareScale, bottomTrailingRadius: isHovered ? 0 : 8 * squareScale, topTrailingRadius: 8 * squareScale))
 
                             // Sound wave animation overlay
                             if !isHovered {
-                                HStack(spacing: 1) {
+                                HStack(spacing: 1 * squareScale) {
                                     ForEach(0..<5, id: \.self) { index in
-                                        RoundedRectangle(cornerRadius: 1)
+                                        RoundedRectangle(cornerRadius: 1 * squareScale)
                                             .fill(Color.white.opacity(0.6))
-                                            .frame(width: 2, height: 4 + 8 * (1 + sin(animationPhase + Double(index) * 0.8)))
+                                            .frame(width: 2 * squareScale, height: (4 + 8 * (1 + sin(animationPhase + Double(index) * 0.8))) * squareScale)
                                             .clipShape(Capsule())
                                     }
                                 }
-                                .frame(height: 16)
+                                .frame(height: 16 * squareScale)
                                 .opacity(isHovered ? 0.0 : 1.0)  // Fade when expanded view opens
                             }
                         }
-                        .clipShape(UnevenRoundedRectangle(topLeadingRadius: 8, bottomLeadingRadius: isHovered ? 0 : 8, bottomTrailingRadius: isHovered ? 0 : 8, topTrailingRadius: 8))
+                        .clipShape(UnevenRoundedRectangle(topLeadingRadius: 8 * squareScale, bottomLeadingRadius: isHovered ? 0 : 8 * squareScale, bottomTrailingRadius: isHovered ? 0 : 8 * squareScale, topTrailingRadius: 8 * squareScale))
                     }
+                    .frame(width: smallSquareSize * 2 + spacingBetweenSquares)
 
                     // Big rectangle appears only when hovered
                     if isHovered {
-                        HStack(spacing: 8) {
-                            // Album art on the left side (smaller)
+                        HStack(spacing: 12) {
+                            // Album art on the left side
                             Group {
                                 if let urlString = info.albumArtURL, let url = URL(string: urlString) {
                                     AsyncImage(url: url) { phase in
@@ -275,52 +288,52 @@ struct ContentView: View {
                                         case .empty:
                                             Rectangle()
                                                 .fill(Color.black)
-                                                .frame(width: 50, height: 60)
-                                                .clipShape(RoundedRectangle(cornerRadius: 6))
+                                                .frame(width: 60, height: 60)
+                                                .clipShape(RoundedRectangle(cornerRadius: 8))
                                         case .success(let image):
                                             ZStack {
                                                 Rectangle()
                                                     .fill(Color.black)
-                                                    .frame(width: 50, height: 60)
+                                                    .frame(width: 60, height: 60)
                                                 image
                                                     .resizable()
                                                     .scaledToFill()
-                                                    .frame(width: 45, height: 45)
-                                                    .clipShape(RoundedRectangle(cornerRadius: 5))
+                                                    .frame(width: 56, height: 56)
+                                                    .clipShape(RoundedRectangle(cornerRadius: 6))
                                             }
-                                            .clipShape(RoundedRectangle(cornerRadius: 6))
+                                            .clipShape(RoundedRectangle(cornerRadius: 8))
                                         case .failure(_):
                                             Rectangle()
                                                 .fill(Color.black)
-                                                .frame(width: 50, height: 60)
-                                                .clipShape(RoundedRectangle(cornerRadius: 6))
+                                                .frame(width: 60, height: 60)
+                                                .clipShape(RoundedRectangle(cornerRadius: 8))
                                         @unknown default:
                                             Rectangle()
                                                 .fill(Color.black)
-                                                .frame(width: 50, height: 60)
-                                                .clipShape(RoundedRectangle(cornerRadius: 6))
+                                                .frame(width: 60, height: 60)
+                                                .clipShape(RoundedRectangle(cornerRadius: 8))
                                         }
                                     }
                                 } else {
                                     Rectangle()
                                         .fill(Color.black)
-                                        .frame(width: 50, height: 60)
-                                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                                        .frame(width: 60, height: 60)
+                                        .clipShape(RoundedRectangle(cornerRadius: 8))
                                 }
                             }
 
-                            // Right side content (compact)
-                            VStack(spacing: 4) {
-                                VStack(spacing: 2) {
+                            // Right side content
+                            VStack(spacing: 6) {
+                                VStack(spacing: 3) {
                                     Text(info.songTitle)
                                         .foregroundColor(.white)
-                                        .font(.system(size: 12))
-                                        .lineLimit(1)
+                                        .font(.system(size: 14, weight: .medium))
+                                        .lineLimit(2)
                                         .truncationMode(.middle)
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                     Text("\(info.artist) - \(info.album)")
                                         .foregroundColor(.white.opacity(0.8))
-                                        .font(.system(size: 11))
+                                        .font(.system(size: 12))
                                         .lineLimit(1)
                                         .truncationMode(.middle)
                                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -328,9 +341,9 @@ struct ContentView: View {
 
                                 ProgressView(value: info.duration > 0 ? info.position / info.duration : 0)
                                     .progressViewStyle(LinearProgressViewStyle(tint: Color.green))
-                                    .frame(height: 3)
+                                    .frame(height: 4)
 
-                                HStack(spacing: 12) {
+                                HStack(spacing: 16) {
                                     Button(action: { Task {
                                         if !isCommandInProgress {
                                             isCommandInProgress = true
@@ -341,7 +354,7 @@ struct ContentView: View {
                                     } }) {
                                         Image(systemName: "backward.end.fill")
                                             .foregroundColor(.white.opacity(isCommandInProgress ? 0.5 : 1.0))
-                                            .font(.system(size: 14))
+                                            .font(.system(size: 16))
                                     }
                                     .buttonStyle(PlainButtonStyle())
                                     .disabled(isCommandInProgress)
@@ -353,7 +366,7 @@ struct ContentView: View {
                                     }) {
                                         Image(systemName: info.isPlaying == .playing ? "pause.fill" : "play.fill")
                                             .foregroundColor(.white.opacity(isCommandInProgress ? 0.5 : 1.0))
-                                            .font(.system(size: 15))
+                                            .font(.system(size: 18))
                                     }
                                     .buttonStyle(PlainButtonStyle())
                                     .disabled(isCommandInProgress)
@@ -370,7 +383,7 @@ struct ContentView: View {
                                     } }) {
                                         Image(systemName: "forward.end.fill")
                                             .foregroundColor(.white.opacity(isCommandInProgress ? 0.5 : 1.0))
-                                            .font(.system(size: 14))
+                                            .font(.system(size: 16))
                                     }
                                     .buttonStyle(PlainButtonStyle())
                                     .disabled(isCommandInProgress)
@@ -379,11 +392,11 @@ struct ContentView: View {
                                 }
                             }
                         }
-                        .frame(width: 260, height: 70)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 6)
+                        .frame(width: bigSquareWidth, height: bigSquareHeight)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
                         .background(Color.black.opacity(0.9))
-                        .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: 12, bottomTrailingRadius: 12))
+                        .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: 16, bottomTrailingRadius: 16))
                         .transition(.move(edge: .top).combined(with: .opacity))
                     }
 
@@ -391,19 +404,21 @@ struct ContentView: View {
             } else {
                 // Loading view
                 VStack(alignment: .center, spacing: 0) {
-                    HStack(spacing: 200) {
+                    HStack(spacing: spacingBetweenSquares) {
                         Rectangle()
                             .fill(Color.black)
-                            .frame(width: 40, height: 40)
-                            .clipShape(UnevenRoundedRectangle(topLeadingRadius: 8, bottomLeadingRadius: 8, bottomTrailingRadius: 8, topTrailingRadius: 8))
+                            .frame(width: smallSquareSize, height: smallSquareSize)
+                            .clipShape(UnevenRoundedRectangle(topLeadingRadius: 8 * squareScale, bottomLeadingRadius: 8 * squareScale, bottomTrailingRadius: 8 * squareScale, topTrailingRadius: 8 * squareScale))
                         Rectangle()
                             .fill(Color.black)
-                            .frame(width: 40, height: 40)
-                            .clipShape(UnevenRoundedRectangle(topLeadingRadius: 8, bottomLeadingRadius: 8, bottomTrailingRadius: 8, topTrailingRadius: 8))
+                            .frame(width: smallSquareSize, height: smallSquareSize)
+                            .clipShape(UnevenRoundedRectangle(topLeadingRadius: 8 * squareScale, bottomLeadingRadius: 8 * squareScale, bottomTrailingRadius: 8 * squareScale, topTrailingRadius: 8 * squareScale))
                     }
+                    .frame(width: smallSquareSize * 2 + spacingBetweenSquares)
                 }
             }
         }
+        .frame(width: maxContainerWidth, alignment: .center)
         .onHover { hovering in
             if hovering {
                 hoverTask?.cancel()

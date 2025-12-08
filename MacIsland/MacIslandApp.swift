@@ -38,8 +38,8 @@ class MacIslandApp: NSObject, NSApplicationDelegate {
         // x = horizontal position from left edge (0 = left edge)
         // y = vertical position from bottom edge (0 = bottom edge)
         // Example for 1920x1080 screen: x=710, y=880 (top center)
-        let x: CGFloat = 595
-        let y: CGFloat = 756
+        let x: CGFloat = 598.8
+        let y: CGFloat = 924.4
 
         overlayWindow = OverlayWindow(
             contentRect: NSRect(x: x, y: y, width: windowWidth, height: windowHeight),
